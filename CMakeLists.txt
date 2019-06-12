@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # setup.py is called during catkin build
-catkin_python_setup()
+#catkin_python_setup()
 
 # Generate messages in the 'msg' folder
 add_message_files(
@@ -30,4 +30,23 @@ catkin_package(
   CATKIN_DEPENDS rospy message_generation message_runtime
 )
 
-install()
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
+
+
+#install()
+
+find_package(PCL 1.2 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+set( OpenCV_DIR "/usr/local/include/opencv2/" )
+find_package( OpenCV REQUIRED )
+
+set(CMAKE_CXX_FLAGS "-pthread")
+
+add_executable(tf_pose_kinect src/kinect.cpp)
+target_link_libraries(tf_pose_kinect ${OpenCV_LIBS} ${catkin_LIBRARIES} ${PCL_LIBRARIES})

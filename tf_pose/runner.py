@@ -2,7 +2,10 @@ import base64
 import os
 
 import cv2
-from functools import lru_cache
+try:
+    from functools import lru_cache
+except ImportError:
+    from backports.functools_lru_cache import lru_cache
 
 from tf_pose import common
 from tf_pose import eval

@@ -20,7 +20,7 @@ except ModuleNotFoundError as e:
     exit(-1)
 
 logger = logging.getLogger('TfPoseEstimator')
-logger.handlers.clear()
+del logger.handlers[:]
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 formatter = logging.Formatter('[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
