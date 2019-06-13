@@ -7,7 +7,9 @@
 #include <pcl_ros/transforms.h>
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/highgui.hpp>
-
+#include <tfpose_ros/Persons.h>
+#include <tfpose_ros/Person.h>
+#include <tfpose_ros/BodyPartElm.h>
 
 class TFPose_Kinect {
 public:
@@ -20,7 +22,9 @@ public:
 private:
 	ros::NodeHandle n;
 	ros::Publisher kinect_image;
+	ros::Publisher pose_estimator_3d;
 	ros::Subscriber point_cloud_data;
+	ros::Subscriber pose_estimator_2d;
 
 	double hypot_3d(double x, double y, double z) {
 		return sqrt(x * x + y * y + z * z);
@@ -50,7 +54,7 @@ private:
 				x = temp_cloud->points[width * h + w].x;
 				y = temp_cloud->points[width * h + w].y;
 				z = temp_cloud->points[width * h + w].z;
-				depth.at<double>(h, w) = hypot_3d(x, y, z);
+				depth.at<double>(h, w) = z;
 			}
 		}
 
@@ -68,15 +72,45 @@ private:
 
 	}
 
+	void pose_estimator_2d_callback(const tfpose_ros::Persons::ConstPtr &data) {
+
+		tfpose_ros::Persons persons;
+		int image_x, image_y;
+
+		persons.image_w = data->image_w;
+		persons.image_h = data->image_h;
+		persons.header = data->header;
+
+		for (auto person : data->persons) {
+			tfpose_ros::Person new_person;
+			for (auto body : person.body_part) {
+				image_x = (int)(body.x * persons.image_w + 0.5);
+				image_y = (int)(body.y * persons.image_h + 0.5);
+
+				tfpose_ros::BodyPartElm new_body;
+				new_body.part_id = body.part_id;
+				new_body.x = body.x;
+				new_body.y = body.y;
+				new_body.z = depth.at<double>(image_y, image_x);
+				new_body.confidence = body.confidence;
+				new_person.body_part.push_back(new_body);
+			}
+			persons.persons.push_back(new_person);
+		}
+		pose_estimator_3d.publish(persons);
+	}
+
 };
 
 TFPose_Kinect::TFPose_Kinect() {
 	kinect_image = n.advertise<sensor_msgs::Image>("/tf_pose/kinect_image", 1);
+	pose_estimator_3d = n.advertise<tfpose_ros::Persons>("/pose_estimator/pose_3d", 1);
 	point_cloud_data = n.subscribe("/camera/depth_registered/points", 1, &TFPose_Kinect::point_cloud_data_callback, this);
+	pose_estimator_2d = n.subscribe("/pose_estimator/pose", 1, &TFPose_Kinect::pose_estimator_2d_callback, this);
 }
 
 TFPose_Kinect::~TFPose_Kinect() {
-
+	printf("Shutdown class of 'TFPose_Kinect'\n");
 }
 
 int main(int argc, char** argv) {
