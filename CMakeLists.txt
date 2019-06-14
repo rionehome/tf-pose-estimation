@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # setup.py is called during catkin build
-#catkin_python_setup()
+catkin_python_setup()
 
 # Generate messages in the 'msg' folder
 add_message_files(
@@ -36,7 +36,7 @@ include_directories(
 )
 
 
-#install()
+install()
 
 find_package(PCL 1.2 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
