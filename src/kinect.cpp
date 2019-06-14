@@ -115,7 +115,7 @@ TFPose_Kinect::~TFPose_Kinect() {
 
 int main(int argc, char** argv) {
 
-	ros::init(argc, argv, "ros_kinect");
+	ros::init(argc, argv, "tfpose_ros_kinect");
 
 	TFPose_Kinect kinect;
 

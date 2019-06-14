@@ -12,7 +12,7 @@
         <param name="resolution" value="$(arg resolution)" />
     </node>
 
-    
+    <node name="pose_estimator_kinect" pkg="tfpose_ros" type="tf_pose_kinect" output="screen" required="true"/>
 
     <node name="pose_estimator_vis" pkg="tfpose_ros" type="visualization.py" output="screen" required="true">
         <param name="camera" value="/tf_pose/kinect_image" />
