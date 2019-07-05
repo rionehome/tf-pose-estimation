@@ -94,8 +94,8 @@ private:
                 while (search_around(i++, cv::Point(image_x, image_y), color.cols, &result));
                 tfpose_ros::BodyPartElm new_body;
                 new_body.part_id = body.part_id;
-                new_body.x = result.x;
-                new_body.y = result.y;
+                new_body.x = body.x;
+                new_body.y = body.y;
                 new_body.z = result.z;
                 new_body.confidence = body.confidence;
                 new_person.body_part.push_back(new_body);
