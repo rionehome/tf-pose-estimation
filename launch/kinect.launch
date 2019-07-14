@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="gpuid" default="0" />
-
+    <include file="$(find freenect_launch)/launch/freenect.launch"/>
     <arg name="model" default="mobilenet_thin" />
     <arg name="resolution" default="432x368" />
 
