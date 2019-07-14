@@ -6,8 +6,11 @@ tf-pose-estimationで人間の関節推定を行うパッケージ
 ```
 $ cd $(ros-workspace)/src/tf-pose-estimation
 $ pip install -r tf-pose-estimation/requirements.txt
+$ sudo apt install swig
 $ cd ../../
 $ catkin_make
+$ cd ./src/tf-pose-estimationtf_pose/pafprocess
+$ swig -python -c++ pafprocess.i && python2 setup.py build_ext --inplace
 ```
 ただし、GPUを有効する場合は`tensorflow-gpu `を導入する必要あり。  
 更に、関節の3D情報を取得する場合は`freenect`とPointCloudライブラリ(PCL)が必須である。
