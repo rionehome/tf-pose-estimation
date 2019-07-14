@@ -67,7 +67,8 @@ def cb_pose(data):
 	for person in data.persons:
 		for body in person.body_part:
 			center = (int(body.x * w + 0.5), int(body.y * h + 0.5))
-			cv2.putText(image, str(body.z), center, cv2.FONT_HERSHEY_COMPLEX, 0.4, (255, 255, 255))
+			#cv2.putText(image, str(body.part_id), center, cv2.FONT_HERSHEY_COMPLEX, 0.4, (0, 0, 0))
+			cv2.putText(image, str(body.z), center, cv2.FONT_HERSHEY_COMPLEX, 0.4, (0, 255, 0))
 
 	pub_img.publish(cv_bridge.cv2_to_imgmsg(image, 'bgr8'))
 
