@@ -46,4 +46,5 @@ find_package( OpenCV REQUIRED )
 set(CMAKE_CXX_FLAGS "-pthread")
 
 add_executable(tf_pose_kinect src/kinect.cpp)
+add_dependencies(tf_pose_kinect ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(tf_pose_kinect ${OpenCV_LIBS} ${catkin_LIBRARIES} ${PCL_LIBRARIES})
