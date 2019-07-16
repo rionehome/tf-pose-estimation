@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="gpuid" default="0" />
-
-    <arg name="model" default="mobilenet_v2_large" />
+    <include file="$(find freenect_launch)/launch/freenect.launch"/>
+    <arg name="model" default="mobilenet_thin" />
     <arg name="resolution" default="432x368" />
 
     <node name="pose_estimator" pkg="tfpose_ros" type="broadcaster_ros.py" output="screen" required="true">

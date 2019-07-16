@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import time
 import cv2
 import rospy
 from sensor_msgs.msg import Image
