@@ -1,1 +1,1 @@
-ros_posenet/Keypoint[] keypoints
+Keypoint[] keypoints

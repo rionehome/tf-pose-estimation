@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
   message_generation
 )
 
@@ -16,13 +17,15 @@ find_package(catkin REQUIRED COMPONENTS
 # Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  BodyPartElm.msg
-  Person.msg
-  Persons.msg
+  Keypoint.msg
+  Pose.msg
+  Poses.msg
 )
 
 generate_messages(
-  DEPENDENCIES std_msgs
+        DEPENDENCIES
+        std_msgs
+        geometry_msgs
 )
 
 catkin_package(
