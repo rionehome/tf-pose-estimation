@@ -15,7 +15,6 @@ from tf_pose.networks import model_wh, get_graph_path
 
 class BroadCaster:
     def __init__(self):
-        
         rospy.loginfo('initialization+')
         rospy.init_node('TfPoseEstimatorROS', anonymous=True, log_level=rospy.INFO)
         # parameters
@@ -28,7 +27,7 @@ class BroadCaster:
         self.pose_estimator = self.__read_model__()
         self.cv_image = None
         
-        rospy.Subscriber('/usb_cam/image_raw', Image, self.callback_image, queue_size=1, buff_size=2 ** 24)
+        rospy.Subscriber('/tfpose_ros/input', Image, self.callback_image, queue_size=1, buff_size=2 ** 24)
         self.pose_pub = rospy.Publisher('/tfpose_ros/output', Poses, queue_size=1)
     
     def __read_model__(self):
@@ -79,9 +78,7 @@ class BroadCaster:
         finally:
             self.tf_lock.release()
         
-        result = self.humans_to_msg(humans, msg)
-        
-        self.pose_pub.publish(result)
+        self.pose_pub.publish(self.humans_to_msg(humans, msg))
 
 
 if __name__ == '__main__':
