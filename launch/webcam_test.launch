@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="gpuid" default="0" />
-    <arg name="model" default="mobilenet_thin" />
+    <arg name="model" default="mobilenet_v2_large" />
     <arg name="resolution" default="432x368" />
     <node name="pose_estimator" pkg="tfpose_ros" type="broadcaster_ros.py" output="screen" required="true">
         <env name="CUDA_VISIBLE_DEVICES" value="$(arg gpuid)" />

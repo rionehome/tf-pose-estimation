@@ -63,6 +63,7 @@ class BroadCaster:
     
     def callback_image(self, msg):
         # type:(Image)->None
+        print "debug"
         try:
             self.cv_image = self.cv_bridge.imgmsg_to_cv2(msg, "bgr8")
         except CvBridgeError as e:
