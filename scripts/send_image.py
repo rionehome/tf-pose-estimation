@@ -12,7 +12,7 @@ def main():
     rospy.init_node("send_image")
     image_pub = rospy.Publisher("/tfpose_ros/input", Image, queue_size=1)
     bridge = CvBridge()
-    img = cv2.imread("/home/migly/catkin_ws/src/tf-pose-estimation/images/hand1.jpg")
+    img = cv2.imread("/home/migly/catkin_ws/src/tf-pose-estimation/images/naikaku.jpg")
     
     msg = bridge.cv2_to_imgmsg(img, encoding="bgr8")
     time.sleep(1)

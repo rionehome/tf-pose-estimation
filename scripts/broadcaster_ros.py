@@ -21,6 +21,8 @@ class BroadCaster:
         self.model = rospy.get_param('~model', 'cmu')
         self.resolution = rospy.get_param('~resolution', '432x368')
         self.resize_out_ratio = float(rospy.get_param('~resize_out_ratio', '4.0'))
+        self.etc = "{}/{}/".format(rospkg.RosPack().get_path('tfpose_ros'), "etcs")
+        self.name_table = self.__read_csv__()
         
         self.tf_lock = Lock()
         self.cv_bridge = CvBridge()
@@ -29,6 +31,14 @@ class BroadCaster:
         
         rospy.Subscriber('/tfpose_ros/input', Image, self.callback_image, queue_size=1, buff_size=2 ** 24)
         self.pose_pub = rospy.Publisher('/tfpose_ros/output', Poses, queue_size=1)
+    
+    def __read_csv__(self):
+        name_table = {}
+        file_ite = open(self.etc + "name_table.csv")
+        for line in file_ite.readlines():
+            element = line.replace("\n", "").split(",")
+            name_table.setdefault(int(element[0]), element[1])
+        return name_table
     
     def __read_model__(self):
         # model読み込み
@@ -44,8 +54,7 @@ class BroadCaster:
             rospy.logerr('invalid model: %s, e=%s' % (self.model, e))
             sys.exit(-1)
     
-    @staticmethod
-    def humans_to_msg(humans, msg):
+    def humans_to_msg(self, humans, msg):
         # type:(list,Image)->Poses
         poses = Poses()
         for human in humans:
@@ -53,7 +62,7 @@ class BroadCaster:
             for body in human.body_parts:
                 body_part = human.body_parts[body]
                 key_msg = Keypoint()
-                key_msg.part = str(body_part.part_idx)
+                key_msg.part = self.name_table[body_part.part_idx]
                 key_msg.image_position.x = body_part.x * msg.width
                 key_msg.image_position.y = body_part.y * msg.height
                 key_msg.score = body_part.score
@@ -63,7 +72,6 @@ class BroadCaster:
     
     def callback_image(self, msg):
         # type:(Image)->None
-        print "debug"
         try:
             self.cv_image = self.cv_bridge.imgmsg_to_cv2(msg, "bgr8")
         except CvBridgeError as e:

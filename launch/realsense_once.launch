@@ -5,4 +5,5 @@
         <param name="model" value="cmu" />
         <param name="resolution" value="640x480" />
     </node>
+    <node name="realsense" pkg="tfpose_ros" type="realsense_once" output="screen" required="true"/>
 </launch>
