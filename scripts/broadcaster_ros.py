@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
+import os, sys
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "../tf_pose")
+
+print os.path.dirname(os.path.abspath(__file__)) + "/../tf_pose"
 
 from threading import Lock
 import rospy
