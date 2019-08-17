@@ -16,11 +16,11 @@
 
 TFPoseRealsenseOnce::TFPoseRealsenseOnce()
 {
-    image_pub = n.advertise<sensor_msgs::Image>("/tfpose/input", 1);
+    image_pub = n.advertise<sensor_msgs::Image>("/tfpose_ros/input", 1);
     pose_result_pub = n.advertise<tfpose_ros::Poses>("/tfpose_ros/result", 1);
     point_cloud_data_sub =
         n.subscribe("/camera/depth_registered/points", 1, &TFPoseRealsenseOnce::point_cloud_data_callback, this);
-    pose_output_sub = n.subscribe("/tfpose/output", 1, &TFPoseRealsenseOnce::pose_callback, this);
+    pose_output_sub = n.subscribe("/tfpose_ros/output", 1, &TFPoseRealsenseOnce::pose_callback, this);
     shutter_sub = n.subscribe("/tfpose_ros/shutter", 1, &TFPoseRealsenseOnce::shutter_callback, this);
 }
 
@@ -91,14 +91,14 @@ void TFPoseRealsenseOnce::pose_callback(const tfpose_ros::Poses::ConstPtr &data)
             image_y = key.image_position.y;
             cv::Point3d result;
             //zの取得
-            result = get_real_point_data(&take_pc, image_x, cv::Point(image_x, image_y));
+            result = get_real_point_data(&take_pc, 640, cv::Point(image_x, image_y));
             std::cout << result << '\n';
             tfpose_ros::Keypoint new_key;
             new_key.part = key.part;
             new_key.image_position.x = image_x;
             new_key.image_position.y = image_y;
-            new_key.position.x = key.position.x;
-            new_key.position.y = key.position.y;
+            new_key.position.x = result.x;
+            new_key.position.y = result.y;
             new_key.position.z = result.z;
             new_key.score = key.score;
             new_pose.keypoints.push_back(new_key);
@@ -112,8 +112,8 @@ cv::Point3d TFPoseRealsenseOnce::get_real_point_data(pcl::PointCloud<pcl::PointX
                                                      int width,
                                                      cv::Point image)
 {
-    double z = depth.at<double>(image.y, image.x);
-    if (!(z >= 0.4 && z <= 4.0)) return cv::Point3d(0.0, 0.0, 0.0);
+    //double z = depth.at<double>(image.y, image.x);
+    //if (!(z >= 0.4 && z <= 4.0)) return cv::Point3d(0.0, 0.0, 0.0);
     auto point = data->points[width * image.y + image.x];
     return cv::Point3d(point.x, point.y, point.z);
 }

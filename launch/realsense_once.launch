@@ -2,8 +2,9 @@
 <launch>
     <node name="pose_estimator" pkg="tfpose_ros" type="broadcaster_ros.py" output="screen" required="true">
         <env name="CUDA_VISIBLE_DEVICES" value="0" />
-        <param name="model" value="cmu" />
+        <param name="model" value="mobilenet_v2_large" />
         <param name="resolution" value="640x480" />
     </node>
-    <node name="realsense" pkg="tfpose_ros" type="realsense_once" output="screen" required="true"/>
+    <node name="realsense" pkg="tfpose_ros" type="tf_pose_realsense_once" output="screen" required="true"/>
+    <include file="$(find realsense2_camera)/launch/rs_rgbd.launch"/>
 </launch>
