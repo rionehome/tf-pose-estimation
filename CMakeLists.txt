@@ -5,33 +5,36 @@ project(tfpose_ros)
 add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  std_msgs
-  message_generation
-)
+        roscpp
+        rospy
+        std_msgs
+        geometry_msgs
+        message_generation
+        )
 
 # setup.py is called during catkin build
 
 # Generate messages in the 'msg' folder
 add_message_files(
-  FILES
-  BodyPartElm.msg
-  Person.msg
-  Persons.msg
+        FILES
+        Keypoint.msg
+        Pose.msg
+        Poses.msg
 )
 
 generate_messages(
-  DEPENDENCIES std_msgs
+        DEPENDENCIES
+        std_msgs
+        geometry_msgs
 )
 
 catkin_package(
-  CATKIN_DEPENDS rospy message_generation message_runtime
+        CATKIN_DEPENDS rospy message_generation message_runtime
 )
 
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
+        # include
+        ${catkin_INCLUDE_DIRS}
 )
 
 
@@ -40,11 +43,11 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-set( OpenCV_DIR "/usr/local/include/opencv2/" )
-find_package( OpenCV REQUIRED )
+set(OpenCV_DIR "/usr/local/include/opencv2/")
+find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-pthread")
 
-add_executable(tf_pose_kinect src/kinect.cpp)
-add_dependencies(tf_pose_kinect ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(tf_pose_kinect ${OpenCV_LIBS} ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+add_executable(tf_pose_realsense_once src/realsense_once.cpp include/tfpose_ros/realsence_once.h)
+add_dependencies(tf_pose_realsense_once ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(tf_pose_realsense_once ${OpenCV_LIBS} ${catkin_LIBRARIES} ${PCL_LIBRARIES})
