@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="pose_estimator" pkg="tfpose_ros" type="broadcaster_ros.py" output="screen" required="true">
+        <env name="CUDA_VISIBLE_DEVICES" value="0" />
+        <param name="model" value="cmu" />
+        <param name="resolution" value="640x480" />
+    </node>
+</launch>
